@@ -1,8 +1,12 @@
+* {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Courier New', Courier, monospace;
     min-height: 100vh;
 }
 
@@ -12,8 +16,10 @@ body {
     border: 1px solid black;
     padding: 5px;
     gap: 10px;
-    height: 400px;
+    height: 470px;
     width: 300px;
+    background-color: #243E36;
+    border-radius: 12px;
 }
 
 .display {
@@ -24,11 +30,32 @@ body {
     justify-content: flex-end;
     padding: 10px;
     font-size: 28px;
+    background-color: #F1F7ED;
+    border-radius: 12px;
 }
 
 button {
     width: 67px;
     height: 60px;
     margin: 10px 0px;
+    border-radius: 12px;
+    border: 1px solid;
+    font-size: 18px;
 }
 
+.digit {
+    background-color: #E0EEC6;
+}
+
+.operator {
+    background-color: 	#EFA9AE;
+}
+
+.equals {
+    background-color: #C2A83E;
+}
+
+.clear,
+.delete {
+    width: 143px;
+}

@@ -4,6 +4,7 @@ let operator = '';
 let divError = false;
 let displayValue = '';
 let running = false;
+let hasDot = false;
 
 function add(x, y) {
     return Number(x) + Number(y);
@@ -23,6 +24,7 @@ function divide(x, y) {
         operand2 = null
         operator = ''
         displayValue = ''
+        hasDot = false
         divError = true
         return "Error !/0";
     }
@@ -30,21 +32,34 @@ function divide(x, y) {
 }
 
 function operate(operand1, operator, operand2) {
+    let result = ''
     switch (operator) {
         case '+':
-            return add(operand1, operand2);
+            result = add(operand1, operand2);
         case '-':
-            return subtract(operand1, operand2);
+            result = subtract(operand1, operand2);
         case '*':
-            return multiply(operand1, operand2);
+            result = multiply(operand1, operand2);
         case '/':
-            return divide(operand1, operand2);
+            result = divide(operand1, operand2);
     }
+    return result
 }
 
 function showDisplay() {
     display = document.querySelector('.display');
-    display.textContent = displayValue;
+    if (displayValue.length > 17) {
+        display.textContent = 'Input too large'
+        operand1 = null
+        operand2 = null
+        operator = null
+        displayValue = ''
+        hasDot = false;
+    }
+    else {
+        display.textContent = displayValue;
+    }
+
 }
 
 showDisplay()
@@ -56,60 +71,98 @@ buttons.forEach(button => {
 
 function handleEvent(event) {
     let button = event.target;
-    if (button.classList.contains('digit')) {
-        if(running === true) {
-            running = false
-            displayValue = ''
-        }
-        displayValue += button.textContent;
-        showDisplay();
+
+    if (button.classList.contains('dot')) {
+        handleDot(button)
+    }
+    else if (button.classList.contains('digit')) {
+        handleDigit(button)
     }
     else if (button.classList.contains('operator')) {
-        if( displayValue === '') {
-            return
-        }
-        else if (operand1 === null) {
-            operator = button.textContent
-            operand1 = displayValue;
-            displayValue += button.textContent;
-            showDisplay()
-            displayValue = ''
-        }
-        else if (operand2 === null) {
-            operand2 = displayValue;
-            displayValue = operate(operand1, operator, operand2)
-            if (!divError) {
-                operand1 = displayValue
-                operand2 = null
-                operator = button.textContent
-                displayValue += operator
-            }
-            showDisplay()
-            displayValue = ''
-            divError = false
-        }
+        handleOperator(button)
     }
     else if (button.classList.contains('equals')) {
-        if (operand1 != null && operand2 === null) {
-            operand2 = displayValue;
-            displayValue = operate(operand1, operator, operand2)
-            if (!divError) {
-                operand1 = null
-                operand2 = null
-            }
-            showDisplay()
-            if (divError) {
-                displayValue = ''
-            }
-            divError = false
-            running = true
-        }
+        handleEquals()
     }
     else if (button.classList.contains('clear')) {
         displayValue = ''
         operand1 = null
         operand2 = null
         operator = ''
+        hasDot = false
         showDisplay()
     }
+    else {
+        if (displayValue.substring(displayValue.length - 1) === '.') {
+            hasDot = false
+        }
+        displayValue = displayValue.slice(0, -1)
+        showDisplay()
+    }
+}
+
+function handleEquals() {
+    if (operand1 != null && operand2 === null) {
+        operand2 = displayValue;
+        displayValue = operate(operand1, operator, operand2)
+        if (!divError) {
+            operand1 = null
+            operand2 = null
+        }
+        showDisplay()
+        if (divError) {
+            displayValue = ''
+            hasDot = false
+        }
+        divError = false
+        running = true
+    }
+}
+
+function handleOperator(button) {
+    if (displayValue === '') {
+        return
+    }
+    else if (operand1 === null) {
+        operator = button.textContent
+        operand1 = displayValue;
+        displayValue += button.textContent;
+        showDisplay()
+        displayValue = ''
+        hasDot = false
+    }
+    else if (operand2 === null) {
+        operand2 = displayValue;
+        displayValue = operate(operand1, operator, operand2)
+        if (!divError) {
+            operand1 = displayValue
+            operand2 = null
+            operator = button.textContent
+            displayValue += operator
+        }
+        showDisplay()
+        displayValue = ''
+        hasDot = false
+        divError = false
+    }
+}
+
+function handleDigit(button) {
+    if (running === true) {
+        running = false
+        displayValue = ''
+        hasDot = false
+    }
+    if (displayValue.length < 16) {
+        displayValue += button.textContent;
+        showDisplay();
+    }
+
+}
+
+function handleDot(button) {
+    if (!hasDot) {
+        handleDigit(button)
+    }
+    hasDot = true
 }
