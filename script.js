@@ -7,15 +7,15 @@ let running = false;
 let hasDot = false;
 
 function add(x, y) {
-    return Number(x) + Number(y);
+    return Number(Number(x) + Number(y));
 }
 
 function subtract(x, y) {
-    return Number(x) - Number(y);
+    return Number(Number(x) - Number(y));
 }
 
 function multiply(x, y) {
-    return Number(x) * Number(y);
+    return Number(Number(x) * Number(y));
 }
 
 function divide(x, y) {
@@ -28,7 +28,7 @@ function divide(x, y) {
         divError = true
         return "Error !/0";
     }
-    return +(Number(x) / Number(y)).toFixed(6);
+    return Number(Number(x) / Number(y));
 }
 
 function operate(operand1, operator, operand2) {
@@ -47,12 +47,12 @@ function operate(operand1, operator, operand2) {
             result = divide(operand1, operand2);
             break;
     }
-    return result
+    return +(result.toPrecision(6))
 }
 
 function showDisplay() {
     display = document.querySelector('.display');
-    if (displayValue.length > 17) {
+    if (displayValue.length > 16) {
         display.textContent = 'Input too large'
         operand1 = null
         operand2 = null
@@ -83,12 +83,7 @@ function handleEvent(event) {
         handleDigit(button)
     }
     else if (button.classList.contains('operator')) {
-        if (button.textContent === '-' && operand2 === null) {
-            handleDigit(button)
-        }
-        else {
-            handleOperator(button)
-        }
+        handleOperator(button)
     }
     else if (button.classList.contains('equals')) {
         handleEquals()
