@@ -36,12 +36,16 @@ function operate(operand1, operator, operand2) {
     switch (operator) {
         case '+':
             result = add(operand1, operand2);
+            break;
         case '-':
             result = subtract(operand1, operand2);
+            break;
         case '*':
             result = multiply(operand1, operand2);
+            break;
         case '/':
             result = divide(operand1, operand2);
+            break;
     }
     return result
 }
@@ -79,7 +83,12 @@ function handleEvent(event) {
         handleDigit(button)
     }
     else if (button.classList.contains('operator')) {
-        handleOperator(button)
+        if (button.textContent === '-' && operand2 === null) {
+            handleDigit(button)
+        }
+        else {
+            handleOperator(button)
+        }
     }
     else if (button.classList.contains('equals')) {
         handleEquals()
